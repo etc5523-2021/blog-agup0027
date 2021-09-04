@@ -1,7 +1,7 @@
 ---
-title: "About this site"
+title: "References"
 description: |
-  Some additional details about the website
+  Data and details about the situation of Covid-19 has been gathered from below websites. 
 ---
 
 ```{r setup, include=FALSE}
@@ -14,3 +14,4 @@ knitr::opts_chunk$set(echo = FALSE)
 3. https://data.uninfo.org/Home/_SERP
 4. https://data.humdata.org/dataset/un-collective-results-on-the-covid-19-socioeconomic-response-in-2020
 5. https://ourworldindata.org/coronavirus-testing#source-information-country-by-country
+6. https://tribune.com.pk/story/2318509/is-pakistan-a-rockstar-of-covid-control-strategy

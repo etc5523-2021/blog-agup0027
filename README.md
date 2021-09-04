@@ -2,7 +2,7 @@
 
 
 This is the blog of Ambalika Gupta.
-The URL of this blog is [FILL].
+The URL of this blog is https://heuristic-ride-cc72cd.netlify.app/.
 
 ## Blog Post 1
 

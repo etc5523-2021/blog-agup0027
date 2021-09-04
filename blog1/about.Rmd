@@ -20,10 +20,6 @@ library(plotly)
 library(broom)
 library(readr)
 library(dplyr)
-library(sf)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(viridis)
 library(lubridate)
 library(DT)
 library(reactable)
@@ -59,12 +55,15 @@ figure1
 
 ```
 
+It is clearly evident that, during the initial phase i.e. the first wave when the entire world was battling the pandemic, Pakistan itself was a victim to this deadly virus. The period from April to June during both year 2020 and 2021 proved to be fatal for Pakistan with maximum number of positive cases and daily death toll in triple digits. Pakistan also faced the maximum brunt of the virus during its second wave from April 2021 with daily death toll crossing 200. 
+
+
 # Daily Covid-19 tests done each month
 
 ```{r covidtests}
 paksum <- pakistan %>% 
   mutate(month = month(date), year = year(date)) %>% 
-  group_by(month, year) %>% 
+  group_by(month, year, population) %>% 
   summarise(newtests = list(new_tests)) %>% 
   mutate(sparkline = NA) %>% 
   arrange(year)
@@ -81,6 +80,7 @@ table1 <- reactable(paksum, columns = list(
 table1
 ```
 
+The above summary table is an evidence that Pakistan's testing rate is quite low as compared to its population, hence lower testing leads to reporting of lower cases than the actual number present in the country. 
 
 ## Covid-19 Vaccination Summary 
 
@@ -105,6 +105,10 @@ DT::datatable(df, caption = htmltools::tags$caption(
   ))
 
 ```
+
+The above table is evident of the fact that Pakistan has not reached even 5% of the population of full vaccination rate as of August 2021. Each country has a long way to go to reach even 30% of its populations of fully vaccinated state. 
+
+
 ## Covid-19 Social Economic Response 
 
 ### A set of socio-economic response monitoring indicators that emanated from the UN framework for the immediate response to the socio-economic impact of COVID-19. The indicators monitor the progress and achievements of UNCT’s collective actions in socio-economic response. Together with the indicators monitoring the health and humanitarian responses, and the indicators monitoring the human rights impact of COVID-19, they make up the core basis for the UN system’s indicator framework for COVID-19.
