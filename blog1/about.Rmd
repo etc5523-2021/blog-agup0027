@@ -1,10 +1,153 @@
 ---
-title: "About this site"
+title: "A Glimpse into Pakistan's side"
 description: |
-  Some additional details about the website
+  Is Pakistan a rockstar of Covid control strategy?
+  Problem of a broken system is that we don’t have facts to win an argument. In recent weeks we have seen a lot of self-congratulatory announcements declaring Pakistan a winner of coronavirus control strategy. Many international magazines have also put Pakistan on the top of their lists. What is the real situation? If Pakistan’s Covid control strategy is so successful, then why are other countries not approaching us to learn from our experience? Why have top scientific journals not published our success story? If Pakistan is a rockstar then where are the queues of people willing for an autograph or a selfie with our experts?
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+```{r loadpackages, message=FALSE, warning=FALSE, include=FALSE}
+library(readr)
+library(naniar)
+library(tidyverse)
+library(kableExtra)
+library(bookdown)
+library(janitor)
+library(plotly)
+library(broom)
+library(readr)
+library(dplyr)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(viridis)
+library(lubridate)
+library(DT)
+library(reactable)
+library(sparkline)
+library(gt)
+library(remotes)
+library(arsenal) 
+```
+
+```{r readcsv}
+covid_data <- read_csv("data/covid-data.csv")
+
+pakistan <- covid_data %>% 
+  filter(location == "Pakistan") %>% 
+  select(location, date, total_cases, new_cases, total_deaths, new_deaths, total_tests, new_tests, hosp_patients, total_vaccinations, people_vaccinated, people_fully_vaccinated, population)
+
+```
+
+# Daily Covid-19 cases each month
+
+```{r casesummary}
+cases <- ggplot(pakistan, aes(x = date, y = new_cases)) + geom_line() + labs(title = "Covid-19 Daily cases and  registered", x = "Time", y = "Number of cases")
+
+death <- ggplot(pakistan, aes(x = date, y = new_deaths)) + geom_line() + labs(title = "Covid-19 Number of Daily cases and Deaths", x = "Time", y = "Number of deaths")
+
+case <- ggplotly(cases)
+
+dd <- ggplotly(death)
+
+figure1<- subplot(case,dd ,nrows = 1, titleX = TRUE, titleY = TRUE)
+
+figure1
+
+```
+
+# Daily Covid-19 tests done each month
+
+```{r covidtests}
+paksum <- pakistan %>% 
+  mutate(month = month(date), year = year(date)) %>% 
+  group_by(month, year) %>% 
+  summarise(newtests = list(new_tests)) %>% 
+  mutate(sparkline = NA) %>% 
+  arrange(year)
+
+table1 <- reactable(paksum, columns = list(
+  newtests = colDef(cell = function(values) {
+    sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(pakistan$new_tests))
+  }),
+  sparkline = colDef(cell = function(value, index) {
+    sparkline(paksum$newtests[[index]])
+  })
+), bordered = TRUE)
+
+table1
+```
+
+
+## Covid-19 Vaccination Summary 
+
+```{r vaccination}
+
+df <- pakistan %>% 
+  mutate(dated = format(as.Date(pakistan$date), "%m-%Y"), year = year(date)) %>% 
+  group_by(dated, year, population) %>%
+  summarise(firstvaccine = sum(people_vaccinated, na.rm=TRUE), fullyvaccinated = sum(people_fully_vaccinated, na.rm=TRUE)) %>% 
+  arrange(year) %>% 
+  mutate(firstdosepropn = firstvaccine/population, fullyvaccinatedpropn = fullyvaccinated/population)
+
+df1 <- pakistan %>% 
+  mutate(dated = format(as.Date(pakistan$date), "%m-%Y"), year = year(date)) %>% 
+  group_by(dated, population) %>% 
+  summarise(deaths = sum(new_deaths, na.rm=TRUE))
+  
+
+DT::datatable(df, caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table 2: ', htmltools::em('Covid-19 Vaccination Summary')
+  ))
+
+```
+## Covid-19 Social Economic Response 
+
+### A set of socio-economic response monitoring indicators that emanated from the UN framework for the immediate response to the socio-economic impact of COVID-19. The indicators monitor the progress and achievements of UNCT’s collective actions in socio-economic response. Together with the indicators monitoring the health and humanitarian responses, and the indicators monitoring the human rights impact of COVID-19, they make up the core basis for the UN system’s indicator framework for COVID-19.
+
+```{r social}
+
+social <- read_csv("data/socialeconomicindicators.csv")
+
+social <- social %>% 
+  janitor::clean_names()
+  
+social$data_value <- as.numeric(social$data_value)
+
+social <- social %>% 
+  separate(time_period, c("quarter","year"), "-") %>% 
+  group_by(indicator, subgroup) %>% 
+  summarise(value = mean(data_value)) %>% 
+  na.omit()
+
+gt(social) %>% 
+  tab_header(title = "Covid-19 Social Economic Response : Pakistan",
+             subtitle = "Indicators monitoring the health and humanitarian responses, the human rights impact of COVID-19") %>% 
+  tab_source_note(md("Data is collected by the UNCTs and reported through the UN INFO platform")) 
+
+  
+```
+
+When health systems collapse, deaths from the outbreak itself can quickly be exceeded by deaths from preventable or treatable conditions, no longer managed by a failing health system. It is therefore crucial to maintain essential lifesaving health services even while addressing the pandemic. The UNDS prioritized support to countries to maintain essential health services and the systems that support them. The UNDS mobilized around several global health milestone and re-purposed a significant proportion of its portfolio on ensuring essential services are maintained and health systems strengthened to prepare for recovery.
+
+## Descriptive Summary Statistic Table
+
+```{r}
+
+summary(pakistan) %>%
+  kbl(caption = "Descriptive Summary Statistics") %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  kable_material_dark() %>% 
+  kable_styling(bootstrap_options = c("hover"))
+
+```
+
+
+
+
+
 
