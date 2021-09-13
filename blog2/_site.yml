@@ -1,0 +1,15 @@
+name: "Covid-19 : Glimpse into Pakistan"
+title: "Covid-19 : Glimpse into Pakistan"
+theme: my_theme.css
+description: |
+  covid-19_pakistan
+output_dir: "_site"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "References"
+      href: references.html
+output: distill::distill_article
