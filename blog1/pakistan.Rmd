@@ -1,0 +1,192 @@
+---
+title: "Is Pakistan a rockstar of Covid control strategy?"
+description: |
+  Problem of a broken system is that we don’t have facts to win an argument. In recent weeks we have seen a lot of self-congratulatory announcements declaring Pakistan a winner of coronavirus control strategy. Many international magazines have also put Pakistan on the top of their lists. What is the real situation? If Pakistan’s Covid control strategy is so successful, then why are other countries not approaching them to learn from their experience? Why have top scientific journals not published their success story?
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r loadpackages, message=FALSE, warning=FALSE, include=FALSE}
+library(readr)
+library(naniar)
+library(tidyverse)
+library(kableExtra)
+library(bookdown)
+library(janitor)
+library(plotly)
+library(broom)
+library(readr)
+library(dplyr)
+library(lubridate)
+library(DT)
+library(reactable)
+library(sparkline)
+library(gt)
+library(remotes)
+library(arsenal) 
+```
+
+```{r readcsv}
+covid_data <- read_csv("data/covid-data.csv")
+
+pakistan <- covid_data %>% 
+  filter(location == "Pakistan") %>% 
+  select(location, date, total_cases, new_cases, total_deaths, new_deaths, total_tests, new_tests, hosp_patients, total_vaccinations, people_vaccinated, people_fully_vaccinated, population)
+
+```
+
+COVID-19 cases were reported from Islamabad and Karachi on February 26, 2020 . Pakistan being one of the most densely populated countries in Asia, with a population of 204.65 million, and Karachi being the largest metropolitan city in Pakistan, has been greatly vulnerable to this outbreak. Owing to its present economic condition, health care resources, and the occurrence of previous outbreaks, the Centers for Disease Control and Prevention had already issued a level 3 warning for international travelers to Pakistan.
+
+# Daily Covid-19 cases each month
+
+```{r casesummary}
+cases <- ggplot(pakistan, aes(x = date, y = new_cases)) + geom_line() + labs(title = "Covid-19 Daily cases and  registered", x = "Time", y = "Number of cases")
+
+death <- ggplot(pakistan, aes(x = date, y = new_deaths)) + geom_line() + labs(title = "Covid-19 Number of Daily cases and Deaths", x = "Time", y = "Number of deaths")
+
+case <- ggplotly(cases)
+
+dd <- ggplotly(death)
+
+figure1<- subplot(case,dd ,nrows = 1, titleX = TRUE, titleY = TRUE)
+
+figure1
+
+```
+
+It is clearly evident that, during the initial phase i.e. the first wave when the entire world was battling the pandemic, Pakistan itself was a victim to this deadly virus. The period from April to June during both year 2020 and 2021 proved to be fatal for Pakistan with maximum number of positive cases and daily death toll in triple digits. Pakistan also faced the maximum brunt of the virus during its second wave from April 2021 with daily death toll crossing 200. 
+
+# Daily Covid-19 tests done each month
+
+```{r covidtests}
+paksum <- pakistan %>% 
+  mutate(dated = format(as.Date(pakistan$date), "%m-%Y")) %>% 
+  group_by(dated, population) %>% 
+  summarise(newtests = list(new_tests)) %>% 
+  mutate(dailytest = NA) 
+
+paksum$dated[paksum$dated=="02-2020"]<-"February-2020"
+paksum$dated[paksum$dated=="03-2020"]<-"March-2020"
+paksum$dated[paksum$dated=="04-2020"]<-"April-2020"
+paksum$dated[paksum$dated=="05-2020"]<-"May-2020"
+paksum$dated[paksum$dated=="06-2020"]<-"June-2020"
+paksum$dated[paksum$dated=="07-2020"]<-"July-2020"
+paksum$dated[paksum$dated=="08-2020"]<-"August-2020"
+paksum$dated[paksum$dated=="09-2020"]<-"September-2020"
+paksum$dated[paksum$dated=="10-2020"]<-"October-2020"
+paksum$dated[paksum$dated=="11-2020"]<-"November-2020"
+paksum$dated[paksum$dated=="12-2020"]<-"December-2020"
+paksum$dated[paksum$dated=="01-2021"]<-"January-2021"
+paksum$dated[paksum$dated=="02-2021"]<-"February-2021"
+paksum$dated[paksum$dated=="03-2021"]<-"March-2021"
+paksum$dated[paksum$dated=="04-2021"]<-"April-2021"
+paksum$dated[paksum$dated=="05-2021"]<-"May-2021"
+paksum$dated[paksum$dated=="06-2021"]<-"June-2021"
+paksum$dated[paksum$dated=="07-2021"]<-"July-2021"
+paksum$dated[paksum$dated=="08-2021"]<-"August-2021"
+paksum$dated[paksum$dated=="09-2021"]<-"September-2021"
+
+table1 <- reactable(paksum, columns = list(
+  newtests = colDef(cell = function(values) {
+    sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(pakistan$new_tests))
+  }),
+  dailytest = colDef(cell = function(value, index) {
+    sparkline(paksum$newtests[[index]])
+  })
+), bordered = TRUE)
+
+table1
+```
+
+The above summary table is an evidence that Pakistan's testing rate is quite low as compared to its population, hence lower testing leads to reporting of lower cases than the actual number present in the country. 
+
+## Covid-19 Vaccination Summary 
+
+```{r vaccination}
+
+df <- pakistan %>% 
+  mutate(dated = format(as.Date(pakistan$date), "%m-%Y")) %>% 
+  group_by(dated, population) %>%
+  summarise(firstvaccine = sum(people_vaccinated, na.rm=TRUE), fullyvaccinated = sum(people_fully_vaccinated, na.rm=TRUE)) %>% 
+  mutate(firstdosepropn = firstvaccine/population, fullyvaccinatedpropn = fullyvaccinated/population) %>% 
+  filter(dated %in% c("02-2021", "03-2021", "04-2021", "05-2021", "06-2021", "07-2021", "08-2021", "09-2021"))
+
+df$dated[df$dated=="02-2021"]<-"February-2021"
+df$dated[df$dated=="03-2021"]<-"March-2021"
+df$dated[df$dated=="04-2021"]<-"April-2021"
+df$dated[df$dated=="05-2021"]<-"May-2021"
+df$dated[df$dated=="06-2021"]<-"June-2021"
+df$dated[df$dated=="07-2021"]<-"July-2021"
+df$dated[df$dated=="08-2021"]<-"August-2021"
+df$dated[df$dated=="09-2021"]<-"September-2021"
+
+gt(df) %>% 
+  tab_header(title = "Covid-19 Vaccination Rate : Pakistan",
+             subtitle = "Has Pakistan stepped up COVID-19 vaccine roll-out?") %>% 
+  tab_source_note(md("Pakistan: Government of Pakistan: https://ncoc.gov.pk/covid-vaccination-en.php"))
+
+
+```
+
+The above table is evident of the fact that Pakistan has not reached even 5% of the population of full vaccination rate as of August 2021. Each country has a long way to go to reach even 30% of its populations of fully vaccinated state. 
+
+
+## Covid-19 Social Economic Response 
+
+### A set of socio-economic response monitoring indicators that emanated from the UN framework for the immediate response to the socio-economic impact of COVID-19. The indicators monitor the progress and achievements of UNCT’s collective actions in socio-economic response. Together with the indicators monitoring the health and humanitarian responses, and the indicators monitoring the human rights impact of COVID-19, they make up the core basis for the UN system’s indicator framework for COVID-19.
+
+```{r social}
+
+social <- read_csv("data/socialeconomicindicators.csv")
+
+social <- social %>% 
+  janitor::clean_names()
+  
+social$data_value <- as.numeric(social$data_value)
+
+social <- social %>% 
+  separate(time_period, c("quarter","year"), "-") %>% 
+  group_by(indicator, subgroup) %>% 
+  summarise(value = mean(data_value)) %>% 
+  na.omit()
+
+ 
+
+DT::datatable(social, caption = htmltools::tags$caption(
+    style = 'caption-side: bottom; text-align: center;',
+    'Table 1: ', htmltools::em('Indicators monitoring the health and humanitarian responses, the human rights impact of COVID-19')
+  ))
+  
+```
+
+When health systems collapse, deaths from the outbreak itself can quickly be exceeded by deaths from preventable or treatable conditions, no longer managed by a failing health system. It is therefore crucial to maintain essential lifesaving health services even while addressing the pandemic. The UNDS prioritized support to countries to maintain essential health services and the systems that support them. The UNDS mobilized around several global health milestone and re-purposed a significant proportion of its portfolio on ensuring essential services are maintained and health systems strengthened to prepare for recovery.
+
+## Descriptive Summary Statistic Table
+
+```{r}
+
+paksumm <- pakistan %>%
+  select(total_cases, new_cases, total_deaths, total_vaccinations, people_vaccinated, people_fully_vaccinated)
+ 
+  summary(paksumm) %>% 
+  kbl(caption = "Descriptive Summary Statistics") %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>% 
+  kable_material_dark() %>% 
+  kable_styling(bootstrap_options = c("hover"))
+
+```
+
+The above statistic summary table shows that an average of 2000 cases were reported daily and that Pakistan faced a casualty of around 26k cases, which is about 0.02% of total number of cases. The data is highly skewed hence may not be the most accurate representation of the dataset.
+
+# Conclusion
+
+The administration had a huge responsibility to constrain the spread through a timely response and the adoption of appropriate measures to avoid any major catastrophe. The disease was initially difficult to contain, especially because of noncompliance of the general population to the necessary measures and timely reporting of symptoms. Within 45 days, on April 10, 2020, Pakistan reported 4601 confirmed cases with a death toll approaching 66 individuals.
+
+There was a mixed response from the community. Few people paid attention to the news and some even considered it fake. News of the virus being a hoax or propaganda spread greatly worldwide and countered the efforts of governments and other agencies that made marked efforts to tackle the spread of the pandemic
+
+
+
+

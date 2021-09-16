@@ -8,6 +8,23 @@ description: |
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+# Data description
+
+## Data Sources  
+The data used for the study come from the following sources:
+
+Source 1. [OurWorldinData](https://ourworldindata.org/coronavirus/country/pakistan). All visualizations, data, and code produced by Our World in Data are completely open access under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/). 
+
+Source 2. [SocioeconomicResponse](https://unsdg.un.org/resources/un-framework-immediate-socio-economic-response-covid-19). Data is collected by the UNCTs and reported through the UN INFO platform.[CovidDashboard](https://data.uninfo.org/Home/_SERP)
+
+## Description
+
+- Confirmed cases and deaths: our data comes from the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University (JHU). 
+- Hospitalizations and intensive care unit (ICU) admissions: our data comes from the European Centre for Disease Prevention and Control (ECDC) for a select number of European countries; and government sources for the United Kingdom, the United States, Canada, Israel, Algeria, and Switzerland
+- Vaccinations against COVID-19: this data is collected by the Our World in Data team from official reports.
+- Other variables: this data is collected from a variety of sources (United Nations, World Bank, Global Burden of Disease, Blavatnik School of Government, etc.). More information is available in our codebook.
+
+
 # References 
 1. https://wwwnc.cdc.gov/travel/notices/covid-2/coronavirus-pakistan
 2. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8136406/
@@ -15,3 +32,4 @@ knitr::opts_chunk$set(echo = FALSE)
 4. https://data.humdata.org/dataset/un-collective-results-on-the-covid-19-socioeconomic-response-in-2020
 5. https://ourworldindata.org/coronavirus-testing#source-information-country-by-country
 6. https://tribune.com.pk/story/2318509/is-pakistan-a-rockstar-of-covid-control-strategy
+7. https://www.sciencedirect.com/science/article/pii/S1201971220306469

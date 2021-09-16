@@ -1,15 +1,17 @@
-name: "Covid-19 : Glimpse into Pakistan"
-title: "Covid-19 : Glimpse into Pakistan"
+name: "Covid-19"
+title: "Covid-19"
 theme: my_theme.css
 description: |
-  covid-19_pakistan
+  covid-19
 output_dir: "_site"
 navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "Analysis - Pakistan"
+      href: pakistan.html
+    - text: "Analysis - Colombia"
+      href: colombia.html
     - text: "References"
       href: references.html
 output: distill::distill_article

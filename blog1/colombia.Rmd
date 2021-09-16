@@ -1,0 +1,114 @@
+---
+title: "Colombia : Successful containment of Covid-19?"
+description: |
+ Is Colombia an example of successful containment of the 2020 COVID-19 pandemic?  
+  Colombia detected its first coronavirus disease 2019 (COVID-19) case on March 2, 2020. From March 22 to April 25, it implemented a national lockdown that, apparently, allowed the country to keep a low incidence and mortality rate up to mid-May. Forced by the economic losses, the government then opened many commercial activities, which was followed by an increase in cases and deaths. 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r loadpackages, message=FALSE, warning=FALSE, include=FALSE}
+library(readr)
+library(naniar)
+library(tidyverse)
+library(kableExtra)
+library(bookdown)
+library(janitor)
+library(plotly)
+library(broom)
+library(readr)
+library(dplyr)
+library(lubridate)
+library(DT)
+library(reactable)
+library(sparkline)
+library(gt)
+library(remotes)
+library(arsenal)
+library(scales)
+```
+
+```{r readcsv}
+covid_data <- read_csv("data/covid-data.csv")
+
+colombia <- covid_data %>% 
+  filter(location == "Colombia") %>% 
+  select(location, date, total_cases, new_cases, total_deaths, new_deaths, total_tests, new_tests, hosp_patients, total_vaccinations, people_vaccinated, people_fully_vaccinated, population)
+
+```
+
+# Daily Covid-19 cases and deaths
+
+```{r casesummary}
+
+cases1 <- ggplot(colombia, aes(x = date, y = new_cases)) + geom_line() + labs(title = "Covid-19 Daily cases and  registered", x = "Time", y = "Number of cases")
+
+death1 <- ggplot(colombia, aes(x = date, y = new_deaths)) + geom_line() + labs(title = "Covid-19 Number of Daily cases and Deaths", x = "Time", y = "Number of deaths")
+
+case1 <- ggplotly(cases1)
+
+dd1 <- ggplotly(death1)
+
+figure1<- subplot(case1,dd1 ,nrows = 1, titleX = TRUE, titleY = TRUE)
+
+figure1
+
+```
+
+We can observe that Colombia witnessed its first wave from March which continue till January. It saw a drop in the cases henceforth and was just reeling from the impact of the first wave, that it was hit with a second wave, which shows an exponential rise in cases, along with a rise in number of daily deaths. Colombia along with most countries experienced the peak of second wave between May to June 2021. And death tally shows how deadly the second wave was due to the widespread Delta variant with long-lasting and harmful symptoms and effects. 
+
+
+# Monthly Covid-19 testing Summary
+
+```{r covidtests}
+
+colombia$ym <- format(colombia$date, "%Y-%m") 
+
+colsum <- colombia %>% 
+  group_by(ym, population) %>% 
+  summarise(newtests = sum(new_tests, na.rm = TRUE))
+
+ggplot(colsum, aes(x = ym, y = newtests)) + geom_bar(stat = "identity") + geom_hline(yintercept = (0.1*colsum$population)) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_y_continuous(label = comma) + labs(title = "Monthly Covid tests done", x = "Month-Year", y = "Number of tests")
+
+```
+
+From the above plot we can observe that Colombia's monthly testing rate is less than 0.1% of its population(Trend Line), hence the daily cases reported may not be accurate, and the cases reported might be lesser than the actual number of cases. It shows maximum tests conducted during the months April - July which was the peak of second wave.  
+
+## Covid-19 Vaccination Summary 
+
+```{r vaccination}
+
+firstdose <- colombia %>% 
+  filter(!is.na(people_vaccinated)) %>% 
+  ggplot(aes(x = date, y = people_vaccinated,)) + geom_line() + geom_hline(yintercept = (0.5*colombia$population)) + scale_y_continuous(labels = comma) + labs(title = "Number of people who have received first dose", x = "Time", y = "Number of people")
+
+
+fullyvax <- colombia %>% 
+  filter(!is.na(people_fully_vaccinated)) %>% 
+  ggplot(aes(x = date, y = people_fully_vaccinated,)) + geom_line() + geom_hline(yintercept = (0.5*colombia$population)) + geom_hline(yintercept = (0.25*colombia$population)) + scale_y_continuous(labels = comma) + labs(title = "Number of people received first dose vs fully vaccinated", x = "Time", y = "")
+
+case2 <- ggplotly(firstdose)
+
+dd2 <- ggplotly(fullyvax)
+
+figure1<- subplot(case2,dd2 ,nrows = 1,
+  shareY = TRUE,
+  titleY = TRUE, titleX = TRUE)
+
+figure1
+
+```
+
+The above trend line in right side plot represents 25% and 50% of Colombia's population respectively. We can observe that Colombia is close to completing first dose of vaccination for 50% of its population, whereas it has crossed fully vaccinating 25% of its population, it still has a long way to go. 
+
+
+# Conclusion
+
+The initial buildup of immunity contributed to the containment of the pandemic in the first and second waves. One factor explaining Colombia’s seeming success in containing the pandemic is the enforcement of a strict lockdown early on. On March 18, 2020, the Colombian government released Decree 420 (Ministerio del Interior) closing schools and universities, cancelling almost all in-person work activities, stopping national and international land and air travel, cancelling all public and private gatherings (of more than six persons), and imposing self-isolation for people over 70 years of age. 
+
+Colombia has a lower case and mortality incidence compared to other South American countries. This may be an effect of the lockdown, but may also be attributed, to some extent, to geographical differences in surveillance capacity. Indigenous populations with little health infrastructure have been hit the hardest.
+
+
+

@@ -1,10 +1,18 @@
 ---
-title: "Covid-19 : Glimpse into Pakistan"
-image: "covid-pakistan-banner.jpg"
-description: |
-  Welcome to the website. I hope you enjoy it!
-output: 
-  postcards::jolla
+title: "Covid-19 : A deadly virus that shook the world"
+image: "covid19.jpg"
+color1: "#06bed4"
+links:
+  - label: WHO
+    url: "https://covid19.who.int/"
+  - label: WorldOMeter
+    url: "https://www.worldometers.info/coronavirus/"
+  - label: Pakistan Government
+    url: "https://covid.gov.pk/"
+  - label: Colombia Government
+    url: "https://coronaviruscolombia.gov.co/"
+output:
+  postcards::onofre
 site: distill::distill_website
 ---
 
@@ -13,32 +21,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
+
 # Introduction and motivation
 
 Covid-19 has shaken the entire world. It has questioned the foundations of science, spirituality, humanity and all aspects of life on which we are currently surviving. It has taught us gratitude, acknowledgment, appreciation, love and care and most importantly how crucial health is. 
 
 The world reaches a grim milestone as global deaths from COVID-19 surpass the 4 million mark. Compounded by fast moving variants and shocking inequity in vaccination, far too many countries in every region of the world are seeing sharp spikes in cases and hospitalization leading to an acute shortage of oxygen, treatments and driving a wave of death in parts of Africa, Asia and Latin America.
 
-The present analysis has been conducted to highlight the situation of the disease in Pakistan in 2020 and the measures taken by various stakeholders coupled with support from the community to abate the risk of catastrophic spread of the virus.
-
-COVID-19 cases were reported from Islamabad and Karachi on February 26, 2020 [5]. Pakistan being one of the most densely populated countries in Asia, with a population of 204.65 million, and Karachi being the largest metropolitan city in Pakistan, has been greatly vulnerable to this outbreak [6]. Owing to its present economic condition, health care resources, and the occurrence of previous outbreaks, the Centers for Disease Control and Prevention had already issued a level 3 warning for international travelers to Pakistan [7]. The administration had a huge responsibility to constrain the spread through a timely response and the adoption of appropriate measures to avoid any major catastrophe. The disease was initially difficult to contain, especially because of noncompliance of the general population to the necessary measures and timely reporting of symptoms. Within 45 days, on April 10, 2020, Pakistan reported 4601 confirmed cases with a death toll approaching 66 individuals [8].
-
-There was a mixed response from the community. Few people paid attention to the news and some even considered it fake. News of the virus being a hoax or propaganda spread greatly worldwide and countered the efforts of governments and other agencies that made marked efforts to tackle the spread of the pandemic
-
-# Data description
-
-## Data Sources  
-The data used for the study come from the following sources:
-
-Source 1. [OurWorldinData](https://ourworldindata.org/coronavirus/country/pakistan). All visualizations, data, and code produced by Our World in Data are completely open access under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/). 
-
-Source 2. [SocioeconomicResponse](https://unsdg.un.org/resources/un-framework-immediate-socio-economic-response-covid-19). Data is collected by the UNCTs and reported through the UN INFO platform.[CovidDashboard](https://data.uninfo.org/Home/_SERP)
-
-## Description
-
-- Confirmed cases and deaths: our data comes from the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University (JHU). 
-- Hospitalizations and intensive care unit (ICU) admissions: our data comes from the European Centre for Disease Prevention and Control (ECDC) for a select number of European countries; and government sources for the United Kingdom, the United States, Canada, Israel, Algeria, and Switzerland
-- Vaccinations against COVID-19: this data is collected by the Our World in Data team from official reports.
-- Other variables: this data is collected from a variety of sources (United Nations, World Bank, Global Burden of Disease, Blavatnik School of Government, etc.). More information is available in our codebook.
+The present analysis has been conducted to highlight the situation of the disease in the countries of Pakistan and Colombia in 2020 and the measures taken by various stakeholders coupled with support from the community to abate the risk of catastrophic spread of the virus.
 
 
