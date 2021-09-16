@@ -2,7 +2,7 @@
 
 
 This is the blog of Ambalika Gupta.
-The URL of this blog is https://heuristic-ride-cc72cd.netlify.app/.
+The URL of this blog is https://covid19-ambalika-gupta.netlify.app/
 
 ## Blog Post 1
 
@@ -10,7 +10,7 @@ This assessment is due Fri Sep 3 2021 11.55PM AEST.
 
 My selected country is Pakistan.
 
-The relevant blog post for this assessment is in index.html
+The relevant blog post for this assessment is in https://covid19-ambalika-gupta.netlify.app/pakistan.html
 
 - [ ] Selected a country
 - [ ] Website with R markdown 
@@ -26,9 +26,9 @@ The relevant blog post for this assessment is in index.html
 
 This assessment is due Fri Sep 17 2021 11.55PM AEST.
 
-My selected country is [FILL].
+My selected country is Colombia
 
-The relevant blog post for this assessment is in [FILL].html
+The relevant blog post for this assessment is in https://covid19-ambalika-gupta.netlify.app/colombia.html
 
 - [ ] Selected a new country
 - [ ] Data Story 1
